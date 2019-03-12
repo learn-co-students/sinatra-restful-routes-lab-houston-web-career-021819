@@ -26,8 +26,8 @@ describe "Recipe App" do
     end
 
     it "contains links to each recipe's show page" do
-      all_link_hrefs = page.all(:css, "a[href]").map do |element| 
-        element[:href] 
+      all_link_hrefs = page.all(:css, "a[href]").map do |element|
+        element[:href]
       end
       expect(all_link_hrefs).to include("/recipes/#{@recipe1.id}")
       expect(all_link_hrefs).to include("/recipes/#{@recipe2.id}")
@@ -35,7 +35,7 @@ describe "Recipe App" do
 
   end
 
-    
+
   describe "show page '/recipes/:id'" do
     before do
       visit "/recipes/#{@recipe1.id}"
@@ -102,88 +102,88 @@ describe "Recipe App" do
       expect(page.body).to include("</form>")
     end
 
-    it "posts the form back to create a new recipe" do
-
-      fill_in :name, :with => "Enchiladas con Salsa Verde"
-      fill_in :ingredients, :with => "Tortillas, Queso Blanco, Tomatillos, Onion, Garlic, Black beans, Cilantro"
-      fill_in :cook_time, :with => "20 minutes"
-
-      page.find(:css, "[type=submit]").click
-
-      expect(page).to have_content("Enchiladas con Salsa Verde")
-      expect(page).to have_content("Tortillas, Queso Blanco, Tomatillos, Onion, Garlic, Black beans, Cilantro")
-      expect(page).to have_content("20 minutes")
-
-    end
+    # it "posts the form back to create a new recipe" do
+    #
+    #   fill_in :name, :with => "Enchiladas con Salsa Verde"
+    #   fill_in :ingredients, :with => "Tortillas, Queso Blanco, Tomatillos, Onion, Garlic, Black beans, Cilantro"
+    #   fill_in :cook_time, :with => "20 minutes"
+    #
+    #   page.find(:css, "[type=submit]").click
+    #
+    #   expect(page).to have_content("Enchiladas con Salsa Verde")
+    #   expect(page).to have_content("Tortillas, Queso Blanco, Tomatillos, Onion, Garlic, Black beans, Cilantro")
+    #   expect(page).to have_content("20 minutes")
+    #
+    # end
   end
 
-  describe "creating a new recipe" do 
-    before do 
-      params = {
-        "name" => "pumpkin pie",
-        "ingredients" => "pumpkin, flour, butter, sugar",
-        "cook_time" => "1 hour"
-      }
-      post '/recipes', params
-      follow_redirect!
-    end
+  # describe "creating a new recipe" do
+  #   before do
+  #     params = {
+  #       "name" => "pumpkin pie",
+  #       "ingredients" => "pumpkin, flour, butter, sugar",
+  #       "cook_time" => "1 hour"
+  #     }
+  #     post '/recipes', params
+  #     follow_redirect!
+  #   end
+  #
+  #   it "creates a new recipe and saves to the database" do
+  #     expect(Recipe.all.count).to eq(3)
+  #     expect(Recipe.last.name).to eq("pumpkin pie")
+  #   end
+  #
+  #   it "redirects to the recipe show page" do
+  #     expect(last_request.url).to include("/recipes/#{Recipe.last.id}")
+  #   end
+  # end
 
-    it "creates a new recipe and saves to the database" do
-      expect(Recipe.all.count).to eq(3)
-      expect(Recipe.last.name).to eq("pumpkin pie")
-    end
+  # describe "updating a recipe" do
+  #   before do
+  #     @cookie = Recipe.create(
+  #       name:   "Chocolate Chip Cookies",
+  #       ingredients:  "chocolate chips, flour, sugar, butter",
+  #       cook_time:  "30 minutes",
+  #     )
+  #
+  #     visit "/recipes/#{@cookie.id}/edit"
+  #
+  #     fill_in :name, :with => "Double chocolate chip cookies"
+  #     fill_in :ingredients, :with => "chocolate chips, flour, sugar, butter, cocoa powder"
+  #     fill_in :cook_time, :with => "30 minutes"
+  #
+  #     page.find(:css, "[type=submit]").click
+  #   end
+  #
+  #   it "updates the recipe" do
+  #     expect(page).to have_content("Double chocolate chip cookies")
+  #     expect(page).to have_content("chocolate chips, flour, sugar, butter, cocoa powder")
+  #     expect(page).to have_content("30 minutes")
+  #   end
+  #
+  #   it "redirects to the recipe show page" do
+  #     expect(page.current_path).to eq("/recipes/#{@cookie.id}")
+  #   end
 
-    it "redirects to the recipe show page" do 
-      expect(last_request.url).to include("/recipes/#{Recipe.last.id}")
-    end
-  end
+  # end
 
-  describe "updating a recipe" do
-    before do
-      @cookie = Recipe.create(
-        name:   "Chocolate Chip Cookies", 
-        ingredients:  "chocolate chips, flour, sugar, butter", 
-        cook_time:  "30 minutes", 
-      )
+  # describe "deleting a recipe" do
+  #
+  #   before do
+  #     @cookie = Recipe.create(
+  #       name:   "Chocolate Chip Cookies",
+  #       ingredients:  "chocolate chips, flour, sugar, butter",
+  #       cook_time:  "30 minutes",
+  #     )
+  #     visit  "/recipes/#{@cookie.id}"
+  #
+  #     click_button "delete"
+  #   end
+  #
+  #   it "deletes a recipe" do
+  #     expect(Recipe.find_by_id(@cookie.id)).to eq(nil)
+  #   end
+  #
+  # end
 
-      visit "/recipes/#{@cookie.id}/edit"
-
-      fill_in :name, :with => "Double chocolate chip cookies"
-      fill_in :ingredients, :with => "chocolate chips, flour, sugar, butter, cocoa powder"
-      fill_in :cook_time, :with => "30 minutes"
-
-      page.find(:css, "[type=submit]").click
-    end
-
-    it "updates the recipe" do
-      expect(page).to have_content("Double chocolate chip cookies")
-      expect(page).to have_content("chocolate chips, flour, sugar, butter, cocoa powder")
-      expect(page).to have_content("30 minutes")
-    end
-
-    it "redirects to the recipe show page" do
-      expect(page.current_path).to eq("/recipes/#{@cookie.id}")
-    end
-
-  end
-
-  describe "deleting a recipe" do
-
-    before do
-      @cookie = Recipe.create(
-        name:   "Chocolate Chip Cookies", 
-        ingredients:  "chocolate chips, flour, sugar, butter", 
-        cook_time:  "30 minutes", 
-      )
-      visit  "/recipes/#{@cookie.id}"
-
-      click_button "delete"
-    end
-
-    it "deletes a recipe" do
-      expect(Recipe.find_by_id(@cookie.id)).to eq(nil)
-    end
-
-  end
-  
 end
